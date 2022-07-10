@@ -1,6 +1,7 @@
 <template>
   <div id="interface">
     <MainMenu @game-on="startGame" v-if="!gameOn"/>
+    <CharacterCreate v-if="gameOn"/>
   </div>
 </template>
 
@@ -35,6 +36,7 @@ export default {
 body {
   height: 100vh;
   background-color: rgb(56, 56, 56);
+  color: white;
 }
 button {
   border-radius: 5%;
