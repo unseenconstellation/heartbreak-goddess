@@ -6,11 +6,14 @@
 </template>
 
 <script>
+import {depAttrs} from "../store/Attr"
 export default {
+
   name: "IndexPage",
   data(){
     return{
-    gameOn: false
+    gameOn: false,
+    test: depAttrs
     }
   },
   methods:{

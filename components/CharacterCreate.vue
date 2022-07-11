@@ -1,12 +1,14 @@
 <template>
   <div id="character-create">
-    I LEARNED IT GO FUCK YOURSELF
+    <PlayerCard/>
   </div>
 </template>
 
 <script>
+import PlayerCard from './CharacterCreate/PlayerCard.vue'
 
 export default {
+  components: { PlayerCard },
 
 
 }
@@ -16,5 +18,6 @@ export default {
 #character-create{
     width: 100%;
     height: 100%;
+
 }
 </style>

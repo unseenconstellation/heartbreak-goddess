@@ -1,12 +1,15 @@
 <template>
   <div id="main-menu">
+    
     <MainMenuTitle />
     <MainMenuOptions @game-on="gameOn()"/>
   </div>
 </template>
 
 <script>
+
 export default {
+
   methods: {
     gameOn() {
       this.$emit("game-on");
