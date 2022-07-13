@@ -38,6 +38,7 @@ export default {
     changeEth(e) {
       console.log(e.target.value);
       this.ethIndex = e.target.value;
+      this.$emit("new-look", ethnicities[ethIndex].choices[imgIndex])
     },
     ethFor() {
       if (this.ethIndex < this.ethnicities.length - 1) {

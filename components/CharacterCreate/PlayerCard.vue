@@ -7,7 +7,7 @@
         <CharBackground />
         <Aura />
         <OtherDep :depAttrs="dependentAttrs" :exp="exp" :money="money" />
-        <CharSelector/>
+        <EthSelector/>
       </div>
       <div id="second-left">
 
@@ -37,7 +37,8 @@ import { attrs, depAttrs } from "../../store/Attr";
 import CharBackground from "./MainInfo/CharBackground.vue";
 import Aura from "./MainInfo/Aura.vue";
 import OtherDep from "./MainInfo/OtherDep.vue";
-import CharSelector from './MainInfo/CharSelector.vue';
+import EthSelector from './MainInfo/EthSelector.vue';
+import { v4 as uuidv4 } from 'uuid';
 
 export default {
   components: {
@@ -49,7 +50,7 @@ export default {
     CharBackground,
     Aura,
     OtherDep,
-    CharSelector,
+    EthSelector,
   },
   data() {
     return {
@@ -77,11 +78,13 @@ export default {
       }),
       exp: 0,
       money: 0,
+      image: "https://i.ibb.co/6WBBP3F/a1.png"
     };
   },
   methods: {
     submitChar() {
-      if (this.name.length > 0) {
+
+      if (this.name.length > 0) { 
         let submInAtt = this.myAttrs.map((attr) => {
           return {
             name: attr.name,
@@ -101,11 +104,14 @@ export default {
           };
         });
         this.character = {
+          id: uuidv4(),
           name: this.name,
           exp: this.exp,
           money: this.money,
           attributes: submInAtt,
           depAttributes: submDeAtt,
+          lust:0,
+          sanity: submDeAtt.find(attr => attr.name === "Sanity").value
         };
       this.$emit("completed", this.character)
       }
