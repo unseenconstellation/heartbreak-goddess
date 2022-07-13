@@ -7,8 +7,10 @@
 </template>
 
 <script>
+import InGame from './InGame.vue';
 
 export default {
+  components: { InGame },
 
   methods: {
     gameOn() {

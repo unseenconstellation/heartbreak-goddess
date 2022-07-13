@@ -42,8 +42,9 @@ export default {
 #dep-attr {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   border: 2px white solid;
   margin-bottom: 10px;
+  flex-wrap: wrap;
 }
 </style>

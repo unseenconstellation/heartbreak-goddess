@@ -61,7 +61,7 @@ export let depAttrs = [
     leftCard: false
   },
   {
-    name: "Lust Threshold",
+    name: "Max-Lust",
     value: 15,
     id: 5,
     reliance: ["Intelligence"],

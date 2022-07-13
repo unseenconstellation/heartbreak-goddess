@@ -1,6 +1,6 @@
 <template>
   <div id="character-create">
-    <PlayerCard/>
+    <PlayerCard @completed = "completed"/>
   </div>
 </template>
 
@@ -9,7 +9,11 @@ import PlayerCard from './CharacterCreate/PlayerCard.vue'
 
 export default {
   components: { PlayerCard },
-
+  methods:{
+    completed(e){
+      this.$emit("completed",e)
+    }
+  }
 
 }
 </script>
