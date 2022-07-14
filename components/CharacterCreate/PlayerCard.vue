@@ -5,7 +5,7 @@
       <div id="left-column">
         <MainInfo @changeName="changeName" :name="name" />
         <CharBackground />
-        <Aura />
+        <Aura :auras= "auras"/>
         <OtherDep :depAttrs="dependentAttrs" :exp="exp" :money="money" />
         <EthSelector/>
       </div>
@@ -13,7 +13,7 @@
 
       </div>
       <div id="mid-column">
-        <MyDep :depAttrs="dependentAttrs" />
+        <MyDep :metric = "metric" :depAttrs="dependentAttrs" />
         <PointsRemaining :pointsLeft="pointsLeft" />
         <button @click="submitChar">Submit</button>
       </div>
@@ -39,6 +39,8 @@ import Aura from "./MainInfo/Aura.vue";
 import OtherDep from "./MainInfo/OtherDep.vue";
 import EthSelector from './MainInfo/EthSelector.vue';
 import { v4 as uuidv4 } from 'uuid';
+import {characters} from '../../store/Characters'
+import {aura} from '../../store/Aura'
 
 export default {
   components: {
@@ -51,12 +53,22 @@ export default {
     Aura,
     OtherDep,
     EthSelector,
+    
   },
+  props:["metric"],
   data() {
     return {
       completed: false,
       character: {},
+      id: uuidv4(),
       name: "",
+      auras: aura.map(aura =>{
+        return{
+          name: aura.name,
+          value: aura.value,
+          id: aura.id
+        }
+      }) ,
       myAttrs: attrs.map((attr) => {
         return {
           name: attr.name,
@@ -74,6 +86,9 @@ export default {
           reliance: [...attr.reliance],
           depend: attr.depend,
           leftCard: attr.leftCard,
+          metricValue: attr.metricValue,
+          metricUnit: attr.metricUnit
+
         };
       }),
       exp: 0,
@@ -83,7 +98,7 @@ export default {
   },
   methods: {
     submitChar() {
-
+      console.log(this.metric, "fuck")
       if (this.name.length > 0) { 
         let submInAtt = this.myAttrs.map((attr) => {
           return {
@@ -104,17 +119,19 @@ export default {
           };
         });
         this.character = {
-          id: uuidv4(),
+          id: this.id,
           name: this.name,
           exp: this.exp,
           money: this.money,
           attributes: submInAtt,
           depAttributes: submDeAtt,
+          auras: this.auras,
           lust:0,
           sanity: submDeAtt.find(attr => attr.name === "Sanity").value
         };
       this.$emit("completed", this.character)
       }
+      characters.push(this.character)
       console.log(this.character)
       // localStorage.setItem("Character",this.character)
     },

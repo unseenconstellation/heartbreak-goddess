@@ -25,13 +25,16 @@ export let depAttrs = [
   {
     name: "Lifting Power",
     value: Math.round(16.408 * Math.E ** (0.498895 * 5)),
+    metricValue: Math.round(0.4535924 *16.408 * Math.E ** (0.498895 * 5)),
     id: 2,
     unit: "lb",
+    metricUnit: "kg",
     reliance: ["Upper Strength", "Lower Strength"],
     depend: function (array) {
       let upperStrength = array[0].value
       let legStrength = array[1].value
       this.value = Math.round(16.408 * Math.E ** (0.498895 * ((.6 * legStrength) + (.4 * upperStrength))))
+      this.metricValue = Math.round(this.value * 0.4535924)
     },
     leftCard: false
   },
@@ -39,11 +42,14 @@ export let depAttrs = [
   {
     name: "Movement Speed",
     value: Math.round(0.229689 * Math.E ** (0.764326 * 5)) + 3,
+    metricValue: Math.round(Math.round(0.229689 * Math.E ** (0.764326 * 5)+3)*1.60934) ,
     unit:"mph",
+    metricUnit: "km/h",
     id: 3,
     reliance: ["Speed"],
     depend: function (speed) {
-      this.value = Math.round(0.229689 * Math.E ** (0.764326 * speed)) + 2
+      this.value = Math.round(0.229689 * Math.E ** (0.764326 * speed)) + 3
+      this.metricValue = Math.round((Math.round(0.229689 * Math.E ** (0.764326 * speed)) + 3)*1.60934)
     },
     leftCard: false
   },

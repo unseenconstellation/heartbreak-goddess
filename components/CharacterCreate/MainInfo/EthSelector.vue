@@ -12,13 +12,13 @@
       </option>
     </select>
     <div id="image">
-    <button @click="imgBack">Backward</button>
+    <button @click="imgBack">←</button>
     <img
       id="your-picture"
       :src="ethnicities[ethIndex].choices[imgIndex]"
       alt=""
     />
-    <button @click="imgFor">Forward</button>
+    <button @click="imgFor">→</button>
 
     </div>
   </div>
@@ -38,7 +38,7 @@ export default {
     changeEth(e) {
       console.log(e.target.value);
       this.ethIndex = e.target.value;
-      this.$emit("new-look", ethnicities[ethIndex].choices[imgIndex])
+      this.$emit("new-look", ethnicities[this.ethIndex].choices[this.imgIndex])
     },
     ethFor() {
       if (this.ethIndex < this.ethnicities.length - 1) {
@@ -74,6 +74,9 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  align-self: center;
+  max-width: 100%;
 }
 #image {
   display: flex;

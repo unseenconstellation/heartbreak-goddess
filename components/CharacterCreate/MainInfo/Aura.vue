@@ -15,11 +15,10 @@
 </template>
 
 <script>
-import { aura } from "../../../store/Aura";
 export default {
   data() {
     return {
-      myAuras: [...aura],
+      myAuras: this.auras,
     };
   },
   methods: {
@@ -27,6 +26,7 @@ export default {
       console.log(this.myAura);
     },
   },
+  props: ["auras"]
 };
 </script>
 

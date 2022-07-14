@@ -1,6 +1,6 @@
 <template>
   <div id="character-create">
-    <PlayerCard @completed = "completed"/>
+    <PlayerCard :metric="metric" @completed = "completed"/>
   </div>
 </template>
 
@@ -13,7 +13,8 @@ export default {
     completed(e){
       this.$emit("completed",e)
     }
-  }
+  },
+  props:["metric"]
 
 }
 </script>

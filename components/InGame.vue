@@ -6,11 +6,13 @@
 </template>
 
 <script>
+import {characters} from '../store/Characters'
 export default {
     props: ["character"],
     methods:{
         find(){
             console.log(this.character)
+            console.log(characters)
         }
     }
 
