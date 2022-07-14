@@ -3,9 +3,9 @@
 
   <div id="interface">
     
-    <MainMenu @game-on="startGame" v-if="!gameOn" :yourChar = "yourChar" :hasChar = "hasChar" />
+    <MainMenu @char-chosen = "characterChosen" @game-on="startGame" v-if="!gameOn" :yourChar = "yourChar" :hasChar = "hasChar" />
     <CharacterCreate
-      @completed="characterMade" :metric = "metric"
+      @completed="characterChosen" :metric = "metric"
       v-if="gameOn && !readyForPlay"
     />
     <InGame :character="character" :metric = "metric" v-if="gameOn && readyForPlay" />
@@ -26,14 +26,17 @@ export default {
   components: { LoadGame },
   name: "IndexPage",
   mounted(){
-    let yourChar = localStorage.getItem("your-chars")
-    if(!yourChar){
+    let localCharacters = localStorage.getItem("your-chars")
+    if(!localCharacters){
       console.log("making new list")
       localStorage.setItem("your-chars", JSON.stringify([]))
-      yourChar = JSON.parse(localStorage.getItem("your-chars"))
+      this.yourChar = JSON.parse(localStorage.getItem("your-chars"))
       
     } else{
-     yourChar = JSON.parse(localStorage.getItem("your-chars"))
+     this.yourChar = JSON.parse(localStorage.getItem("your-chars"))
+
+    }
+    if(JSON.parse(localStorage.getItem("your-chars")).length >0){
       this.hasChar = true
       console.log("You have characters")
     }
@@ -54,7 +57,7 @@ export default {
     startGame() {
       this.gameOn = true;
     },
-    characterMade(e) {
+    characterChosen(e) {
       console.log("let the games begin");
       this.character = e;
       this.readyForPlay = true;

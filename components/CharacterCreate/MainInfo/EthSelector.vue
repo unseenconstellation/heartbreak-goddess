@@ -44,12 +44,14 @@ export default {
       if (this.ethIndex < this.ethnicities.length - 1) {
         this.ethIndex++;
         this.imgIndex = 0;
+        this.$emit("new-look", ethnicities[this.ethIndex].choices[this.imgIndex])
       }
     },
     ethBack() {
       if (this.ethIndex > 0) {
         this.ethIndex--;
         this.imgIndex = 0;
+        this.$emit("new-look", ethnicities[this.ethIndex].choices[this.imgIndex])
       }
     },
     imgFor() {
@@ -58,11 +60,13 @@ export default {
         console.log(
           this.imgIndex < this.ethnicities[this.ethIndex].choices.length - 1
         );
+        this.$emit("new-look", ethnicities[this.ethIndex].choices[this.imgIndex])
       }
     },
     imgBack() {
       if (this.imgIndex > 0) {
         this.imgIndex--;
+        this.$emit("new-look", ethnicities[this.ethIndex].choices[this.imgIndex])
       }
     },
   },

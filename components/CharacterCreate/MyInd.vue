@@ -32,7 +32,7 @@ export default {
         let targetAtt = this.myAttrs.find((attr) => {
           return attr.id === id;
         });
-        targetAtt.value =Math.round((targetAtt.value+ 5)*10)/10;
+        targetAtt.value =Math.round((targetAtt.value+ 0.1)*10)/10;
         this.$emit("increment", id);
       }
     },
@@ -41,7 +41,7 @@ export default {
         return attr.id === id;
       });
       if (targetAtt.value > 1) {
-        targetAtt.value =Math.round((targetAtt.value- 5)*10)/10;
+        targetAtt.value =Math.round((targetAtt.value- 0.1)*10)/10;
         this.$emit("decrement", id);
       }
     },

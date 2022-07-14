@@ -1,10 +1,10 @@
 <template>
   <div id="main-menu">
-    <MainMenuTitle />
-    <LoadGame @load-chars="loadChars" v-if="hasChar && !loadSelect"/>
-    <button id="no-saves" v-else>Load Game</button>
-    <CharacterSelect v-if="hasChar && loadSelect"/>
-    <MainMenuOptions @game-on="gameOn()"/>
+    <MainMenuTitle v-if="!loadSelect" />
+    <LoadGame @game-on="gameOn" @load-chars="loadChars" v-if="hasChar && !loadSelect"/>
+    <button id="no-saves" v-else-if="!loadSelect">Load Game</button>
+    <CharacterSelect @char-chosen = "characterChosen" @game-on="gameOn" v-if="hasChar && loadSelect" :yourChar = "yourChar"/>
+    <MainMenuOptions v-if="!loadSelect" @game-on="gameOn()"/>
   </div>
 </template>
 
@@ -20,7 +20,7 @@ export default {
       loadSelect: false
     }
   },
-  props:["hasChar"],
+  props:["hasChar", "yourChar", ],
   methods: {
     gameOn() {
       this.$emit("game-on");
@@ -29,6 +29,10 @@ export default {
     loadChars(){
       this.loadSelect=true
       console.log(this.loadSelect)
+    },
+    characterChosen(e){
+      this.$emit("char-chosen",e)
+
     }
   },
 };

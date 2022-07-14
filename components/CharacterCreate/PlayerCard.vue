@@ -7,7 +7,7 @@
         <CharBackground />
         <Aura :auras= "auras"/>
         <OtherDep :depAttrs="dependentAttrs" :exp="exp" :money="money" />
-        <EthSelector/>
+        <EthSelector @new-look="newLook"/>
       </div>
       <div id="second-left">
 
@@ -76,7 +76,7 @@ export default {
           id: attr.id,
         };
       }),
-      pointsLeft: 60000,
+      pointsLeft: 10,
       dependentAttrs: depAttrs.map((attr) => {
         return {
           name: attr.name,
@@ -126,6 +126,7 @@ export default {
           attributes: submInAtt,
           depAttributes: submDeAtt,
           auras: this.auras,
+          image: this.image,
           lust:0,
           sanity: submDeAtt.find(attr => attr.name === "Sanity").value,
           gender: "Female",
@@ -211,6 +212,9 @@ export default {
         }
       });
     },
+    newLook(e){
+      this.image = e
+    }
   },
 };
 </script>

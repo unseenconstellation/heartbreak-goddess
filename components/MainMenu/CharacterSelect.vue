@@ -1,16 +1,68 @@
 <template>
   <div id="char-select">
     Select Your Character
-    
+    <div id="character-list">
+      <div v-for="character in yourChar" :key="character.id">
+        <div class="character-card" @click="choseGame(character)">
+          <div class="character-name">{{ character.name }}</div>
+          <img class="character-image" :src="character.image" alt="" />
+          <div>
+            {{ character.id }}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  props: ["yourChar"],
+  methods: {
+    gameOn() {
+      this.$emit("game-on");
+    },
+    characterChosen(e) {
+      this.$emit("char-chosen",e);
+    },
+    choseGame(e){
+        this.gameOn()
+        this.characterChosen(e)
+    }
+  },
+};
+</script>
 
+<style >
+.character-list {
+  display: flex;
+  flex-wrap: wrap;
 }
-</script scoped>
-
-<style>
-
+.character-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 250px;
+  height: 400px;
+  border: 3px solid white;
+  background-color: rgb(90, 0, 56);
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(129, 89, 114),
+    rgb(90, 0, 56)
+  );
+}
+.character-card:hover {
+  border-color: goldenrod;
+}
+.character-image {
+  max-width: 200px;
+  max-height: 200px;
+  border: 3px solid rgb(0, 0, 0);
+}
+.character-name {
+  font-size: 40px;
+  color: rgb(255, 255, 255);
+}
 </style>
