@@ -127,7 +127,8 @@ export default {
           depAttributes: submDeAtt,
           auras: this.auras,
           lust:0,
-          sanity: submDeAtt.find(attr => attr.name === "Sanity").value
+          sanity: submDeAtt.find(attr => attr.name === "Sanity").value,
+          gender: "Female"
         };
       this.$emit("completed", this.character)
       }

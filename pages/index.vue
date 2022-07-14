@@ -92,5 +92,6 @@ button:hover {
   }
 }
 #metric{
+  text-align: center;
 }
 </style>
