@@ -2,7 +2,8 @@
 <div>
 
   <div id="interface">
-    <MainMenu @game-on="startGame" v-if="!gameOn" />
+    
+    <MainMenu @game-on="startGame" v-if="!gameOn" :yourChar = "yourChar" :hasChar = "hasChar" />
     <CharacterCreate
       @completed="characterMade" :metric = "metric"
       v-if="gameOn && !readyForPlay"
@@ -18,17 +19,35 @@
 </template>
 
 <script>
+import LoadGame from '../components/MainMenu/LoadGame.vue';
 
 import { depAttrs } from "../store/Attr";
 export default {
+  components: { LoadGame },
   name: "IndexPage",
+  mounted(){
+    let yourChar = localStorage.getItem("your-chars")
+    if(!yourChar){
+      console.log("making new list")
+      localStorage.setItem("your-chars", JSON.stringify([]))
+      yourChar = JSON.parse(localStorage.getItem("your-chars"))
+      
+    } else{
+     yourChar = JSON.parse(localStorage.getItem("your-chars"))
+      this.hasChar = true
+      console.log("You have characters")
+    }
+
+  },
   data() {
     return {
       gameOn: false,
       test: depAttrs,
       readyForPlay: false,
       character: {},
-      metric: false
+      metric: false,
+      hasChar: false,
+      yourChar: []
     };
   },
   methods: {
@@ -43,6 +62,11 @@ export default {
     changeMetric(){
       this.metric = !this.metric
       console.log(this.metric)
+      this.testLocal()
+    },
+    testLocal(){
+      let test = localStorage.getItem("You")
+      console.log(test)
     }
 
   },

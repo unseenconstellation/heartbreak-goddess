@@ -128,13 +128,18 @@ export default {
           auras: this.auras,
           lust:0,
           sanity: submDeAtt.find(attr => attr.name === "Sanity").value,
-          gender: "Female"
+          gender: "Female",
+          victims: [],
+          charactersMet:[]
         };
       this.$emit("completed", this.character)
       }
       characters.push(this.character)
       console.log(this.character)
-      // localStorage.setItem("Character",this.character)
+      let yourChars = JSON.parse(localStorage.getItem("your-chars"))
+      yourChars.push(this.character)
+      let charsString = JSON.stringify(yourChars)
+      localStorage.setItem("your-chars", charsString)
     },
     changeName(e) {
       this.name = e;
