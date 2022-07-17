@@ -62,9 +62,9 @@ export default {
       this.yourChar.splice(this.yourChar.find(character=>{
         return character.id === e
       }))
-      localStorage.setItem("your-chars", this.yourChar)
-      if(this.hasChar.length === 0){
-        this.hasChar = false
+      localStorage.setItem("your-chars", JSON.stringify(this.yourChar))
+      if(this.yourChar.length === 0){
+        console.log("it's here")
       }
     },
     backMenu(){

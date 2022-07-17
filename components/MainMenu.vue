@@ -2,8 +2,8 @@
   <div id="main-menu">
 
     <MainMenuTitle v-if="!loadSelect && !options" />
-    <LoadGame @back-menu="backMenu" @game-on="gameOn" @load-chars="loadChars" v-if="hasChar && !loadSelect && !options"/>
-    <button id="no-saves" v-else-if="!loadSelect && !options">Load Game</button>
+    <LoadGame @back-menu="backMenu" @game-on="gameOn" @load-chars="loadChars" v-if="yourChar.length>0&&hasChar && !loadSelect && !options"/>
+    <button id="no-saves" v-else-if="!loadSelect && !options && yourChar.length === 0">Load Game</button>
     <CharacterSelect @char-delete ="charDelete" @back-menu="backMenu" @char-chosen = "characterChosen" @game-on="gameOn" v-if="hasChar && loadSelect && !options" :yourChar = "yourChar"/>
     <MainMenuOptions v-if="!loadSelect && !options" @game-on="gameOn()"/>
     <Options @option-change = "optionChange" :metric = "metric" v-if="!loadSelect" @option-select= "optionSelect" />
@@ -29,6 +29,7 @@ export default {
   methods: {
     charDelete(e){
       this.$emit("char-delete", e)
+  
     },
     gameOn() {
       this.$emit("game-on");
