@@ -1,28 +1,38 @@
 <template>
   <div id="card-border">
-    <CreateTitle />
+    <div class="title-back">
+      <button @click="backFromNewGame">←Back</button>
+      
+      <CreateTitle />
+    </div>
     <div id="player-card">
       <div id="left-column">
         <MainInfo @changeName="changeName" :name="name" />
         <CharBackground />
-        <Aura :auras= "auras"/>
+        <Aura :auras="auras" />
         <OtherDep :depAttrs="dependentAttrs" :exp="exp" :money="money" />
-        <EthSelector @new-look="newLook"/>
+        <EthSelector :image = "image" @new-look="newLook" />
+        <ImageUpload @upload-image ="uploadImage"/>
+        
       </div>
-      <div id="second-left">
-
-      </div>
+      <div id="second-left"></div>
       <div id="mid-column">
-        <MyDep :metric = "metric" :depAttrs="dependentAttrs" />
-        <PointsRemaining :pointsLeft="pointsLeft" />
-        <button @click="submitChar">Submit</button>
-      </div>
       <MyInd
         @decrement="decrement"
         @increment="increment"
         :pointsLeft="pointsLeft"
         :myAttrs="myAttrs"
       />
+        </div>
+      <div id="right-column">
+        <MyDep :metric="metric" :depAttrs="dependentAttrs" />
+        <PointsRemaining :pointsLeft="pointsLeft" />
+        <button id="submit-character" @click="submitChar">Submit</button>
+        <div v-if="warning" class="warning">You need to input a name and utlize all the points
+          you have remaining.
+
+      </div>
+      </div>
     </div>
   </div>
 </template>
@@ -37,10 +47,12 @@ import { attrs, depAttrs } from "../../store/Attr";
 import CharBackground from "./MainInfo/CharBackground.vue";
 import Aura from "./MainInfo/Aura.vue";
 import OtherDep from "./MainInfo/OtherDep.vue";
-import EthSelector from './MainInfo/EthSelector.vue';
-import { v4 as uuidv4 } from 'uuid';
-import {characters} from '../../store/Characters'
-import {aura} from '../../store/Aura'
+import EthSelector from "./MainInfo/EthSelector.vue";
+import { v4 as uuidv4 } from "uuid";
+import { characters } from "../../store/Characters";
+import { aura } from "../../store/Aura";
+import { attack, attacks } from "../../store/Attacks";
+import ImageUpload from './ImageUpload.vue';
 
 export default {
   components: {
@@ -53,22 +65,23 @@ export default {
     Aura,
     OtherDep,
     EthSelector,
-    
+    ImageUpload,
   },
-  props:["metric"],
+  props: ["metric"],
   data() {
     return {
       completed: false,
       character: {},
       id: uuidv4(),
       name: "",
-      auras: aura.map(aura =>{
-        return{
+      warning: false,
+      auras: aura.map((aura) => {
+        return {
           name: aura.name,
           value: aura.value,
-          id: aura.id
-        }
-      }) ,
+          id: aura.id,
+        };
+      }),
       myAttrs: attrs.map((attr) => {
         return {
           name: attr.name,
@@ -87,19 +100,19 @@ export default {
           depend: attr.depend,
           leftCard: attr.leftCard,
           metricValue: attr.metricValue,
-          metricUnit: attr.metricUnit
-
+          metricUnit: attr.metricUnit,
         };
       }),
+      attacks: attacks,
       exp: 0,
       money: 0,
-      image: "https://i.ibb.co/6WBBP3F/a1.png"
+      image: "https://i.ibb.co/6WBBP3F/a1.png",
     };
   },
   methods: {
     submitChar() {
-      console.log(this.metric, "fuck")
-      if (this.name.length > 0) { 
+      if (this.name.length > 0 && !this.pointsLeft) {
+        this.warning = false
         let submInAtt = this.myAttrs.map((attr) => {
           return {
             name: attr.name,
@@ -127,24 +140,35 @@ export default {
           depAttributes: submDeAtt,
           auras: this.auras,
           image: this.image,
-          lust:0,
-          sanity: submDeAtt.find(attr => attr.name === "Sanity").value,
+          lust: 0,
+          sanity: submDeAtt.find((attr) => attr.name === "Sanity").value,
           gender: "Female",
           victims: [],
-          charactersMet:[]
+          charactersMet: [],
+          inBattle: false,
+          skills: [
+            ...this.attacks.filter(
+              (attack) => attack.weapon === "Melee" || attack.weapon === "Spell"
+            ),
+          ],
         };
-      this.$emit("completed", this.character)
+        this.$emit("completed", this.character);
+      characters.push(this.character);
+      console.log(this.character);
+      let yourChars = JSON.parse(localStorage.getItem("your-chars"));
+      yourChars.push(this.character);
+      let charsString = JSON.stringify(yourChars);
+      localStorage.setItem("your-chars", charsString);
+      }else{
+        this.warning = true
       }
-      characters.push(this.character)
-      console.log(this.character)
-      let yourChars = JSON.parse(localStorage.getItem("your-chars"))
-      yourChars.push(this.character)
-      let charsString = JSON.stringify(yourChars)
-      localStorage.setItem("your-chars", charsString)
     },
     changeName(e) {
       this.name = e;
       console.log("This name is ", this.name);
+    },
+    uploadImage(e){
+      this.image = e
     },
     increment(id) {
       console.log(this.myAttrs);
@@ -212,14 +236,21 @@ export default {
         }
       });
     },
-    newLook(e){
-      this.image = e
-    }
+    newLook(e) {
+      this.image = e;
+    },
+    backFromNewGame(){
+      this.$emit("back-menu")
+
+    },
   },
 };
 </script>
 
 <style>
+.title-back{
+
+}
 input {
   background-color: rgba(255, 255, 255, 0.226);
   color: white;
@@ -229,7 +260,10 @@ input {
 }
 #left-column {
   align-self: flex-start;
+  max-width: 361.89px;
+  
 }
+
 #player-card {
   display: flex;
   flex-direction: row;
@@ -237,13 +271,19 @@ input {
   align-items: center;
   border-top: white 2px double;
   border-bottom: white 2px double;
-  background-color: rgba(255, 0, 255, 0.13);
+  background-color: rgba(71, 1, 71, 0.493);
   margin-top: 5px;
   flex-wrap: wrap;
   padding-top: 5px;
 }
 #mid-column {
-  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
   max-width: 100%;
+}
+#submit-character{
+  
 }
 </style>

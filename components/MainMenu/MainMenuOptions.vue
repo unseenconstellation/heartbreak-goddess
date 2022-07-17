@@ -1,5 +1,6 @@
 <template>
   <MainMenuButton name="Start" @game-on="gameOn()" />
+  
 </template>
 
 <script>

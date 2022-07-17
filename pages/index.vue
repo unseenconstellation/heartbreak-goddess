@@ -1,26 +1,23 @@
 <template>
-<div>
+<div id="whole-game">
 
   <div id="interface">
     
-    <MainMenu @char-chosen = "characterChosen" @game-on="startGame" v-if="!gameOn" :yourChar = "yourChar" :hasChar = "hasChar" />
+    <MainMenu @back-menu = "backMenu" @option-change = "optionChange" :metric = "metric" @char-chosen = "characterChosen" @game-on="startGame" v-if="!gameOn" :yourChar = "yourChar" :hasChar = "hasChar" />
     <CharacterCreate
+      @back-menu = "backMenu"
       @completed="characterChosen" :metric = "metric"
       v-if="gameOn && !readyForPlay"
     />
-    <InGame :character="character" :metric = "metric" v-if="gameOn && readyForPlay" />
+    <InGame @in-battle = "toBattle" :character="character" :metric = "metric" v-if="gameOn && readyForPlay" />
 
   </div>
-  <div id="metric">
-      <input id="metric" @change="changeMetric" type="checkbox"  />
-    <label > Metric System</label><br />
-      </div>
 </div>
 </template>
 
 <script>
 import LoadGame from '../components/MainMenu/LoadGame.vue';
-
+import {randomMap} from '../store/MapGen'
 import { depAttrs } from "../store/Attr";
 export default {
   components: { LoadGame },
@@ -40,6 +37,13 @@ export default {
       this.hasChar = true
       console.log("You have characters")
     }
+    let metric = JSON.parse(localStorage.getItem("metric"))
+    console.log(metric)
+    if(metric === null){
+      localStorage.setItem("metric", false)
+    }else{
+      this.metric = metric
+    }
 
   },
   data() {
@@ -48,12 +52,19 @@ export default {
       test: depAttrs,
       readyForPlay: false,
       character: {},
-      metric: false,
+      metric: null,
       hasChar: false,
       yourChar: []
     };
   },
   methods: {
+    backMenu(){
+      this.gameOn = false
+    },
+    toBattle(e){
+      this.character.inBattle = e
+      console.log("CHARLIE MURPHY")
+    },
     startGame() {
       this.gameOn = true;
     },
@@ -70,6 +81,21 @@ export default {
     testLocal(){
       let test = localStorage.getItem("You")
       console.log(test)
+    },
+    optionChange(e){
+      console.log(e, "you made it")
+      if (e === "metric"){
+        if(this.metric !== false){
+          console.log("setting to false")
+          localStorage.setItem("metric", false)
+          this.metric= false
+
+        }else{
+          console.log("setting to true")
+           localStorage.setItem("metric", true)
+          this.metric= true
+        }
+      }
     }
 
   },
@@ -87,10 +113,12 @@ export default {
   text-align: center;
   height: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 body {
-  font-family: "Roboto", "Rajdhani", "Franklin Gothic Medium", "Arial Narrow",
+  font-family:  "Rajdhani", "Franklin Gothic Medium", "Arial Narrow",
     Arial, sans-serif;
   height: 100vh;
   background-color: rgb(56, 56, 56);
@@ -120,5 +148,8 @@ button:hover {
 }
 #metric{
   text-align: center;
+}
+#whole-game{
+  height: 100%;
 }
 </style>

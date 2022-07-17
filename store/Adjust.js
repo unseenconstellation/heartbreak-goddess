@@ -1,9 +1,12 @@
-import { characters } from "./Characters";
+import {depAttrs} from './Attr'
 export function adjust(id) {
-    console.log(characters)
+    let you = JSON.parse(localStorage.getItem("your-chars")).find(you => you.id === id)
+    let characters = [...you.charactersMet, you]
     let char = characters.find(character => character.id === id)
     char.attributes.forEach(attribute => {
+        console.log("problem?")
         char.depAttributes.forEach((attr) => {
+            attr.depend = depAttrs.find(dependent=> dependent.name === attr.name).depend
             if (attr.reliance.includes(attribute.name)) {
                 if (attr.reliance.length > 1) {
                     let orderedArray = [];

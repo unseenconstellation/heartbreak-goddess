@@ -56,7 +56,6 @@ export default {
   justify-content: space-between;
   align-items: space-between;
   flex-wrap: wrap;
-  border: 2px white double;
 }
 #overall-attributes {
   width: 300px;

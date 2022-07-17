@@ -1,5 +1,6 @@
 <template>
   <div id="char-select">
+    <button @click="backMenu">←Back</button>
     Select Your Character
     <div id="character-list">
       <div v-for="character in yourChar" :key="character.id">
@@ -28,13 +29,26 @@ export default {
     choseGame(e){
         this.gameOn()
         this.characterChosen(e)
+    },
+    backMenu(){
+        this.$emit("back-menu")
     }
   },
 };
 </script>
 
 <style >
-.character-list {
+#char-select{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    background-color: rgba(71, 1, 71, 0.493);
+    border-top: 2px white solid;
+    border-bottom: 2px white solid;
+}
+#character-list {
   display: flex;
   flex-wrap: wrap;
 }

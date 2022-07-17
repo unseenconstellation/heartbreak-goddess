@@ -1,6 +1,7 @@
 <template>
   <div  id="dep-attr">
     <div  v-for="attr in attrs" :key="attr.id">
+
         <div class="attribute" @click="check" v-if="!attr.leftCard && !metric">
             <div>{{attr.name}}</div>
             <h3>{{attr.value}} {{attr.unit}}</h3>
@@ -37,7 +38,7 @@ export default {
     border-bottom: 2px white solid;
 }
 #dep-attr {
-    width: 100%;
+
     border: 2px white solid;
     margin-bottom: 10px;
 }

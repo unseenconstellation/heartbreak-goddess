@@ -15,7 +15,7 @@
     <button @click="imgBack">←</button>
     <img
       id="your-picture"
-      :src="ethnicities[ethIndex].choices[imgIndex]"
+      :src="image"
       alt=""
     />
     <button @click="imgFor">→</button>
@@ -27,6 +27,7 @@
 <script>
 import { ethnicities } from "../../../store/Ethnicities";
 export default {
+  props:["image"],
   data() {
     return {
       ethIndex: 0,

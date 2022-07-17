@@ -1,10 +1,13 @@
 <template>
   <div id="main-menu">
-    <MainMenuTitle v-if="!loadSelect" />
-    <LoadGame @game-on="gameOn" @load-chars="loadChars" v-if="hasChar && !loadSelect"/>
-    <button id="no-saves" v-else-if="!loadSelect">Load Game</button>
-    <CharacterSelect @char-chosen = "characterChosen" @game-on="gameOn" v-if="hasChar && loadSelect" :yourChar = "yourChar"/>
-    <MainMenuOptions v-if="!loadSelect" @game-on="gameOn()"/>
+
+    <MainMenuTitle v-if="!loadSelect && !options" />
+    <LoadGame @back-menu="backMenu" @game-on="gameOn" @load-chars="loadChars" v-if="hasChar && !loadSelect && !options"/>
+    <button id="no-saves" v-else-if="!loadSelect && !options">Load Game</button>
+    <CharacterSelect @back-menu="backMenu" @char-chosen = "characterChosen" @game-on="gameOn" v-if="hasChar && loadSelect && !options" :yourChar = "yourChar"/>
+    <MainMenuOptions v-if="!loadSelect && !options" @game-on="gameOn()"/>
+    <Options @option-change = "optionChange" :metric = "metric" v-if="!loadSelect" @option-select= "optionSelect" />
+    
   </div>
 </template>
 
@@ -12,15 +15,17 @@
 import InGame from './InGame.vue';
 import CharacterSelect from './MainMenu/CharacterSelect.vue';
 import LoadGame from './MainMenu/LoadGame.vue'
+import Options from './Options/Options.vue';
 
 export default {
-  components: { InGame, LoadGame, CharacterSelect },
+  components: { InGame, LoadGame, CharacterSelect, Options },
   data(){
     return{
-      loadSelect: false
+      loadSelect: false,
+      options: false
     }
   },
-  props:["hasChar", "yourChar", ],
+  props:["hasChar", "yourChar","metric" ],
   methods: {
     gameOn() {
       this.$emit("game-on");
@@ -33,6 +38,17 @@ export default {
     characterChosen(e){
       this.$emit("char-chosen",e)
 
+    },
+    optionSelect(){
+      this.options = !this.options
+      console.log("OPTIONS")
+    },
+    optionChange(e){
+      this.$emit("option-change", e)
+    },
+    backMenu(){
+      this.loadSelect=false
+      this.$emit("back-menu")
     }
   },
 };
@@ -42,7 +58,11 @@ export default {
 #main-menu{
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    width: 100%;
+    align-items: space-around;
+    
+    
+    
 }
 #no-saves{
   border-color: grey;
