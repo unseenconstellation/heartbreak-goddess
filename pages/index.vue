@@ -3,7 +3,7 @@
 
   <div id="interface">
     
-    <MainMenu @back-menu = "backMenu" @option-change = "optionChange" :metric = "metric" @char-chosen = "characterChosen" @game-on="startGame" v-if="!gameOn" :yourChar = "yourChar" :hasChar = "hasChar" />
+    <MainMenu @char-delete = "charDelete" @back-menu = "backMenu" @option-change = "optionChange" :metric = "metric" @char-chosen = "characterChosen" @game-on="startGame" v-if="!gameOn" :yourChar = "yourChar" :hasChar = "hasChar" />
     <CharacterCreate
       @back-menu = "backMenu"
       @completed="characterChosen" :metric = "metric"
@@ -58,6 +58,15 @@ export default {
     };
   },
   methods: {
+    charDelete(e){
+      this.yourChar.splice(this.yourChar.find(character=>{
+        return character.id === e
+      }))
+      localStorage.setItem("your-chars", this.yourChar)
+      if(this.hasChar.length === 0){
+        this.hasChar = false
+      }
+    },
     backMenu(){
       this.gameOn = false
     },
