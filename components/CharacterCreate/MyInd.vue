@@ -51,17 +51,18 @@ export default {
 
 <style>
 .att-cate {
+  width: 89%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: space-between;
+  justify-content: space-around;
+  align-items: center;
   flex-wrap: wrap;
 }
 #overall-attributes {
   width: 300px;
   height: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   flex-wrap: wrap;
 }
 input[type="number"]::-webkit-inner-spin-button {
