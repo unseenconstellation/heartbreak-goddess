@@ -1,112 +1,108 @@
 <template>
-<div id="whole-game">
-
-  <div id="interface">
-    
-    <MainMenu @char-delete = "charDelete" @back-menu = "backMenu" @option-change = "optionChange" :metric = "metric" @char-chosen = "characterChosen" @game-on="startGame" v-if="!gameOn" :yourChar = "yourChar" :hasChar = "hasChar" />
-    <CharacterCreate
-      @back-menu = "backMenu"
-      @completed="characterChosen" :metric = "metric"
-      v-if="gameOn && !readyForPlay"
-    />
-    <InGame @in-battle = "toBattle" :character="character" :metric = "metric" v-if="gameOn && readyForPlay" />
-
+  <div id="whole-game">
+    <div id="interface">
+      <MainMenu
+        @option-change="optionChange"
+        v-if="!gameOn"
+        :yourChar="yourChar"
+        :hasChar="hasChar"
+      />
+      <CharacterCreate
+        @back-menu="backMenu"
+        v-if="gameOn && !readyForPlay"
+      />
+      <InGame
+        @in-battle="toBattle"
+        :character="character"
+        v-if="gameOn && readyForPlay"
+      />
+    </div>
   </div>
-</div>
 </template>
 
 <script>
-import LoadGame from '../components/MainMenu/LoadGame.vue';
-import {randomMap} from '../store/MapGen'
+import useGlobal from "../store/globals";
+import LoadGame from "../components/MainMenu/LoadGame.vue";
 import { depAttrs } from "../store/Attr";
 export default {
   components: { LoadGame },
   name: "IndexPage",
-  mounted(){
-    let localCharacters = localStorage.getItem("your-chars")
-    if(!localCharacters){
-      console.log("making new list")
-      localStorage.setItem("your-chars", JSON.stringify([]))
-      this.yourChar = JSON.parse(localStorage.getItem("your-chars"))
-      
-    } else{
-     this.yourChar = JSON.parse(localStorage.getItem("your-chars"))
-
+  mounted() {
+    let localCharacters = localStorage.getItem("your-chars");
+    if (!localCharacters) {
+      console.log("making new list");
+      localStorage.setItem("your-chars", JSON.stringify([]));
+      this.yourChar = JSON.parse(localStorage.getItem("your-chars"));
+    } else {
+      this.yourChar = JSON.parse(localStorage.getItem("your-chars"));
     }
-    if(JSON.parse(localStorage.getItem("your-chars")).length >0){
-      this.hasChar = true
-      console.log("You have characters")
+    if (JSON.parse(localStorage.getItem("your-chars")).length > 0) {
+      this.hasChar = true;
+      console.log("You have characters");
     }
-    let metric = JSON.parse(localStorage.getItem("metric"))
-    console.log(metric)
-    if(metric === null){
-      localStorage.setItem("metric", false)
-    }else{
-      this.metric = metric
+    let metric = JSON.parse(localStorage.getItem("metric"));
+    console.log(metric);
+    if (metric === null) {
+      localStorage.setItem("metric", false);
+    } else {
+      this.metric = metric;
     }
-
+  },
+  setup() {
+    const { gameOn, number, readyForPlay, character, yourChar } = useGlobal();
+    return {
+      gameOn,
+      number,
+      readyForPlay,
+      character,
+      yourChar,
+    };
   },
   data() {
     return {
-      gameOn: false,
       test: depAttrs,
-      readyForPlay: false,
-      character: {},
       metric: null,
       hasChar: false,
-      yourChar: []
     };
   },
   methods: {
-    charDelete(e){
-      this.yourChar.splice(this.yourChar.find(character=>{
-        return character.id === e
-      }))
-      localStorage.setItem("your-chars", JSON.stringify(this.yourChar))
-      if(this.yourChar.length === 0){
-        console.log("it's here")
-      }
+    fuckYou() {
+      useGlobal().gameOn.value = !useGlobal().gameOn.value;
     },
-    backMenu(){
-      this.gameOn = false
-    },
-    toBattle(e){
-      this.character.inBattle = e
-      console.log("CHARLIE MURPHY")
-    },
-    startGame() {
-      this.gameOn = true;
-    },
-    characterChosen(e) {
-      console.log("let the games begin");
-      this.character = e;
-      this.readyForPlay = true;
-    },
-    changeMetric(){
-      this.metric = !this.metric
-      console.log(this.metric)
-      this.testLocal()
-    },
-    testLocal(){
-      let test = localStorage.getItem("You")
-      console.log(test)
-    },
-    optionChange(e){
-      console.log(e, "you made it")
-      if (e === "metric"){
-        if(this.metric !== false){
-          console.log("setting to false")
-          localStorage.setItem("metric", false)
-          this.metric= false
 
-        }else{
-          console.log("setting to true")
-           localStorage.setItem("metric", true)
-          this.metric= true
+    backMenu() {
+      this.gameOn = false;
+    },
+    toBattle(e) {
+      this.character.inBattle = e;
+      console.log("CHARLIE MURPHY");
+    },
+    changeMetric() {
+      this.metric = !this.metric;
+      console.log(this.metric);
+      this.testLocal();
+    },
+    testLocal() {
+      let test = localStorage.getItem("You");
+      console.log(test);
+    },
+    optionChange(e) {
+      console.log(e, "you made it");
+      if (e === "metric") {
+        if (this.metric !== false) {
+          console.log("setting to false");
+          localStorage.setItem("metric", false);
+          this.metric = false;
+        } else {
+          console.log("setting to true");
+          localStorage.setItem("metric", true);
+          this.metric = true;
         }
       }
-    }
-
+    },
+    fuck() {
+      console.log(this.who);
+    },
   },
 };
 </script>
@@ -127,8 +123,8 @@ export default {
   align-items: center;
 }
 body {
-  font-family:  "Rajdhani", "Franklin Gothic Medium", "Arial Narrow",
-    Arial, sans-serif;
+  font-family: "Rajdhani", "Franklin Gothic Medium", "Arial Narrow", Arial,
+    sans-serif;
   height: 100vh;
   background-color: rgb(56, 56, 56);
   color: white;
@@ -155,10 +151,10 @@ button:hover {
     color: white;
   }
 }
-#metric{
+#metric {
   text-align: center;
 }
-#whole-game{
+#whole-game {
   height: 100%;
 }
 </style>

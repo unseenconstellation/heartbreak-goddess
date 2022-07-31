@@ -20,11 +20,6 @@
 
 <script>
 export default {
-  data() {
-    return {
-      myAttrs: this.myAttrs,
-    };
-  },
   props: ["pointsLeft", "myAttrs"],
   methods: {
     inc(id) {

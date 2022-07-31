@@ -1,39 +1,41 @@
 <template>
   <div id="metric-option">
-    <h4>
-        Toggle Metric Units
-    </h4>
-    <button @click="changeMetric">Set to {{!metric}}</button>
-    <h4>Currently Metric: {{metric}}</h4>
+    <h4>Toggle Metric Units</h4>
+    <br/>
+    <h4 id="metric-button" @click="changeMetric">Set to {{ !metric }}</h4>
+    <br/>
+    <h4>Currently Metric: {{ metric }}</h4>
   </div>
 </template>
 
 <script>
+import useGlobal from "../../store/globals";
 export default {
   data() {
+    const {metric} = useGlobal()
     return {
-        theMetric: this.metric
-      
+      metric
     };
   },
-  props: ["metric"],
 
   methods: {
     changeMetric(e) {
-      this.theMetric = !this.theMetric
-      this.$emit("option-change", "metric")
-      
+      this.metric = !this.metric
     },
   },
 };
 </script>
 
 <style scoped>
-#metric-option{
-    display: flex;
-    justify-content: space-around;
-    align-items:  center;
-    
+#metric-button{
+  color: gold;
+  cursor: pointer;
+}
+#metric-option {
+  display: flex;
+  justify-content: space-around;
+  align-items: space-around;
+  width: 100%;
 }
 .switch {
   position: relative;

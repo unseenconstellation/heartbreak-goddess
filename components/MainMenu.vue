@@ -2,53 +2,50 @@
   <div id="main-menu">
 
     <MainMenuTitle v-if="!loadSelect && !options" />
-    <LoadGame @back-menu="backMenu" @game-on="gameOn" @load-chars="loadChars" v-if="yourChar.length>0&&hasChar && !loadSelect && !options"/>
+    <img v-if="!gameOn && !loadSelect" id="title-image" src="https://tb-lb.sb-cd.com/t/8940826/8/9/w:1600/t8-enh/widowmaker-headscissor-goddess.jpg" alt="headscissor">
+    <LoadGame @back-menu="backMenu"  @load-chars="loadChars" v-if="yourChar.length>0&&hasChar && !loadSelect && !options"/>
     <button id="no-saves" v-else-if="!loadSelect && !options && yourChar.length === 0">Load Game</button>
-    <CharacterSelect @char-delete ="charDelete" @back-menu="backMenu" @char-chosen = "characterChosen" @game-on="gameOn" v-if="hasChar && loadSelect && !options" :yourChar = "yourChar"/>
-    <MainMenuOptions v-if="!loadSelect && !options" @game-on="gameOn()"/>
-    <Options @option-change = "optionChange" :metric = "metric" v-if="!loadSelect" @option-select= "optionSelect" />
-    
+    <CharacterSelect @char-delete ="charDelete" @back-menu="backMenu"  v-if="hasChar && loadSelect && !options" :yourChar = "yourChar"/>
+    <MainMenuOptions v-if="!loadSelect && !options"/>
+    <Options  v-if="!loadSelect" @option-select= "optionSelect" />
   </div>
 </template>
 
 <script>
+import useGlobal from '../store/globals'
 import InGame from './InGame.vue';
 import CharacterSelect from './MainMenu/CharacterSelect.vue';
 import LoadGame from './MainMenu/LoadGame.vue'
 import Options from './Options/Options.vue';
 
 export default {
-  components: { InGame, LoadGame, CharacterSelect, Options },
-  data(){
+  setup(){
+    const{options, loadSelect, gameOn} = useGlobal()
     return{
-      loadSelect: false,
-      options: false
+      gameOn, loadSelect,options
     }
   },
-  props:["hasChar", "yourChar","metric" ],
+  components: { InGame, LoadGame, CharacterSelect, Options },
+  props:["hasChar", "yourChar",],
   methods: {
+    fuck(){
+      this.$emit("fuck")
+    },
     charDelete(e){
       this.$emit("char-delete", e)
   
     },
-    gameOn() {
-      this.$emit("game-on");
-      console.log("success")
-    },
+    // gameOn() {
+    //   this.$emit("game-on");
+    //   console.log("success")
+    // },
     loadChars(){
       this.loadSelect=true
       console.log(this.loadSelect)
     },
-    characterChosen(e){
-      this.$emit("char-chosen",e)
-
-    },
     optionSelect(){
       this.options = !this.options
       console.log("OPTIONS")
-    },
-    optionChange(e){
-      this.$emit("option-change", e)
     },
     backMenu(){
       this.loadSelect=false
@@ -59,6 +56,12 @@ export default {
 </script>
 
 <style >
+#title-image{
+  align-self: center;
+  max-width: 400px;
+  border: double rgb(255, 170, 251) 4px;
+  margin-bottom: 40px;
+}
 #main-menu{
     display: flex;
     flex-direction: column;

@@ -1,12 +1,17 @@
 <template>
-  <button @click="loadEmit">Load Game</button>
+  <button @click="gameOn">Load Game</button>
 </template>
 
 <script>
+import useGlobal from '../../store/globals'
 export default {
+  data(){
+    const {loadSelect} = useGlobal()
+    return {loadSelect}
+  },
   methods:{
-    loadEmit(){
-      this.$emit("load-chars")
+    gameOn(){
+      this.loadSelect = true
     }
   }
 

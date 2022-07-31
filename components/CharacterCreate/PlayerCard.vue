@@ -53,6 +53,7 @@ import { characters } from "../../store/Characters";
 import { aura } from "../../store/Aura";
 import { attack, attacks } from "../../store/Attacks";
 import ImageUpload from './ImageUpload.vue';
+import useGlobal from '../../store/globals'
 
 export default {
   components: {
@@ -67,11 +68,13 @@ export default {
     EthSelector,
     ImageUpload,
   },
-  props: ["metric"],
   data() {
+    const {metric, character, readyForPlay} = useGlobal()
     return {
+      metric,
+      character,
+      readyForPlay,
       completed: false,
-      character: {},
       id: uuidv4(),
       name: "",
       warning: false,
@@ -138,6 +141,7 @@ export default {
           money: this.money,
           attributes: submInAtt,
           depAttributes: submDeAtt,
+          currHealth: submDeAtt.find((attr) => attr.name === "Health").value,
           auras: this.auras,
           image: this.image,
           lust: 0,
@@ -152,13 +156,16 @@ export default {
             ),
           ],
         };
-        this.$emit("completed", this.character);
       characters.push(this.character);
       console.log(this.character);
       let yourChars = JSON.parse(localStorage.getItem("your-chars"));
       yourChars.push(this.character);
       let charsString = JSON.stringify(yourChars);
       localStorage.setItem("your-chars", charsString);
+      console.log("no issue here")
+      this.readyForPlay = true
+
+
       }else{
         this.warning = true
       }
@@ -248,9 +255,6 @@ export default {
 </script>
 
 <style>
-.title-back{
-
-}
 input {
   background-color: rgba(255, 255, 255, 0.226);
   color: white;
@@ -282,8 +286,5 @@ input {
   justify-content: space-between;
   height: 100%;
   max-width: 100%;
-}
-#submit-character{
-  
 }
 </style>

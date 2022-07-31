@@ -1,9 +1,11 @@
 <template>
   <div id="in-game-menu">
     <div id="higher-in-game">
-        <br/>
-        <BattleMap v-if="currentlyBattle" :character="character" />
-        <button @click="toBattle">Battle Map</button>
+      
+        <CharacterUI :you = "character"/>
+        <div>
+{{character}}
+          </div>
       
     </div>
     <div id="lower-in-game">
@@ -13,18 +15,19 @@
 </template>
 
 <script>
-import { characters } from "../store/Characters";
 import { adjust } from "../store/Adjust";
 import BattleMap from "./Maps/BattleMap.vue";
+import CharacterUI from './InGame/CharacterUI.vue';
+import useGlobal from '../store/globals'
 export default {
-  props: ["character"],
   data() {
+    const {character} = useGlobal()
     return {
-      currentlyBattle: this.character.inBattle,
+      currentlyBattle: character.inBattle,
+      character
     };
   },
-  components: { BattleMap },
-
+  components: { BattleMap, CharacterUI },
   methods: {
     find() {
       adjust(this.character.id);
@@ -58,13 +61,13 @@ export default {
 
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
   width: 100%;
   flex-wrap: wrap;
   border-top: 2px white solid;
-  height: 80%;
+  height: 50%;
 }
 #lower-in-game {
-  border: magenta solid 2px;
   width: 100%;
 }
 #action-screen {

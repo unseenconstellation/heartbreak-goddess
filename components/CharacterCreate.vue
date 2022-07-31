@@ -17,7 +17,6 @@ export default {
       this.$emit("back-menu")
     }
   },
-  props:["metric"]
 
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div id="char-select">
-    <button @click="backMenu">←Back</button>
+    <button @click="gameOff">←Back</button>
     Select Your Character
     <div id="character-list">
       <div v-for="character in yourChar" :key="character.id">
@@ -9,7 +9,15 @@
             <span>Are you sure you want to delete?</span>
             <div>
               <button @click="initDelete(character.id)">Yes</button>
-              <button @click="()=>{deleteChoice = null}">No</button>
+              <button
+                @click="
+                  () => {
+                    deleteChoice = null;
+                  }
+                "
+              >
+                No
+              </button>
             </div>
           </div>
           <div class="character-name">{{ character.name }}</div>
@@ -28,33 +36,34 @@
 </template>
 
 <script>
+import useGlobal from "../../store/globals";
 export default {
-    data(){
-        return{
-            deleteChoice: null
-        }
-    },
-  props: ["yourChar"],
+  data() {
+    const { yourChar } = useGlobal();
+    return {
+      deleteChoice: null,
+      yourChar,
+    };
+  },
   methods: {
-    initDelete(e){
-        this.$emit("char-delete",e)
+    initDelete(e) {
+      console.log(e);
+      this.yourChar = this.yourChar.filter((character) => character.id !== e);
+      localStorage.setItem("your-chars", JSON.stringify(this.yourChar));
+      if (this.yourChar.length === 0) {
+        console.log("it's here");
+      }
     },
-    setDelete(e){
-        console.log(e)
-        this.deleteChoice = e
-    },
-    gameOn() {
-      this.$emit("game-on");
-    },
-    characterChosen(e) {
-      this.$emit("char-chosen", e);
+    setDelete(e) {
+      this.deleteChoice = e;
     },
     choseGame(e) {
-      this.gameOn();
-      this.characterChosen(e);
+      useGlobal().readyForPlay.value = true;
+      useGlobal().gameOn.value = true;
+      useGlobal().character.value = e;
     },
-    backMenu() {
-      this.$emit("back-menu");
+    gameOff() {
+      useGlobal().loadSelect.value = false;
     },
   },
 };

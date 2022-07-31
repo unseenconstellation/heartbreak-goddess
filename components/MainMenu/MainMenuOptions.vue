@@ -4,11 +4,11 @@
 </template>
 
 <script>
+import useGlobal from '../../store/globals'
 export default {
   methods: {
     gameOn() {
-      this.$emit("game-on");
-      console.log("yes")
+      useGlobal().gameOn.value = true
     },
   },
 };
