@@ -53,6 +53,7 @@ import {attacks } from "../../store/Attacks";
 import ImageUpload from "./ImageUpload.vue";
 import useGlobal from "../../store/globals";
 import {backgrounds} from "../../store/CharBackground";
+import {cityNameGen} from "../../store/CityGen";
 
 export default {
   components: {
@@ -144,6 +145,7 @@ export default {
           id: this.id,
           name: this.name,
           background: this.background,
+          homeTown: cityNameGen(),
           exp: this.exp,
           money: this.money,
           inventory: [],

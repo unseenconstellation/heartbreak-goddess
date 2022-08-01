@@ -2,6 +2,7 @@
   <div id="character-ui">
     <div>
       <h4>{{ character.name }}</h4>
+      <div>Hometown: {{character.homeTown}}</div>
       <div>
         Health:
         {{ character.currHealth }}/{{
