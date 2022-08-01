@@ -1,6 +1,6 @@
 <template>
   <div id="character-create">
-    <PlayerCard @back-menu = "backMenu" :metric="metric" @completed = "completed"/>
+    <PlayerCard @back-menu = "backMenu"  @completed = "completed"/>
   </div>
 </template>
 

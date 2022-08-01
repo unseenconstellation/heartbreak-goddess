@@ -2,36 +2,34 @@
   <div id="card-border">
     <div class="title-back">
       <button @click="backFromNewGame">←Back</button>
-      
+
       <CreateTitle />
     </div>
     <div id="player-card">
       <div id="left-column">
         <MainInfo @changeName="changeName" :name="name" />
-        <CharBackground />
+        <CharBackground @change-background="changeBackground" />
         <Aura :auras="auras" />
         <OtherDep :depAttrs="dependentAttrs" :exp="exp" :money="money" />
-        <EthSelector :image = "image" @new-look="newLook" />
-        <ImageUpload @upload-image ="uploadImage"/>
-        
+        <EthSelector :image="image" @new-look="newLook" />
+        <ImageUpload @upload-image="uploadImage" />
       </div>
-      <div id="second-left"></div>
+      <!-- <div id="second-left"></div> -->
       <div id="mid-column">
-      <MyInd
-        @decrement="decrement"
-        @increment="increment"
-        :pointsLeft="pointsLeft"
-        :myAttrs="myAttrs"
-      />
-        </div>
+        <MyInd
+          @decrement="decrement"
+          @increment="increment"
+          :pointsLeft="pointsLeft"
+          :myAttrs="myAttrs"
+        />
+      </div>
       <div id="right-column">
         <MyDep :metric="metric" :depAttrs="dependentAttrs" />
         <PointsRemaining :pointsLeft="pointsLeft" />
         <button id="submit-character" @click="submitChar">Submit</button>
-        <div v-if="warning" class="warning">You need to input a name and utlize all the points
-          you have remaining.
-
-      </div>
+        <div v-if="warning" class="warning">
+          You need to input a name and utlize all the points you have remaining.
+        </div>
       </div>
     </div>
   </div>
@@ -51,9 +49,10 @@ import EthSelector from "./MainInfo/EthSelector.vue";
 import { v4 as uuidv4 } from "uuid";
 import { characters } from "../../store/Characters";
 import { aura } from "../../store/Aura";
-import { attack, attacks } from "../../store/Attacks";
-import ImageUpload from './ImageUpload.vue';
-import useGlobal from '../../store/globals'
+import {attacks } from "../../store/Attacks";
+import ImageUpload from "./ImageUpload.vue";
+import useGlobal from "../../store/globals";
+import {backgrounds} from "../../store/CharBackground";
 
 export default {
   components: {
@@ -69,12 +68,17 @@ export default {
     ImageUpload,
   },
   data() {
-    const {metric, character, readyForPlay} = useGlobal()
+    const { metric, character, readyForPlay } = useGlobal();
     return {
       metric,
       character,
       readyForPlay,
       completed: false,
+      background: {
+        name: "Preppy Schoolgirl",
+        id:1,
+        description: ""
+    },
       id: uuidv4(),
       name: "",
       warning: false,
@@ -115,7 +119,7 @@ export default {
   methods: {
     submitChar() {
       if (this.name.length > 0 && !this.pointsLeft) {
-        this.warning = false
+        this.warning = false;
         let submInAtt = this.myAttrs.map((attr) => {
           return {
             name: attr.name,
@@ -132,13 +136,17 @@ export default {
             reliance: [...attr.reliance],
             depend: attr.depend,
             leftCard: attr.leftCard,
+            metricValue: attr.metricValue,
+          metricUnit: attr.metricUnit,
           };
         });
         this.character = {
           id: this.id,
           name: this.name,
+          background: this.background,
           exp: this.exp,
           money: this.money,
+          inventory: [],
           attributes: submInAtt,
           depAttributes: submDeAtt,
           currHealth: submDeAtt.find((attr) => attr.name === "Health").value,
@@ -156,26 +164,40 @@ export default {
             ),
           ],
         };
-      characters.push(this.character);
-      console.log(this.character);
-      let yourChars = JSON.parse(localStorage.getItem("your-chars"));
-      yourChars.push(this.character);
-      let charsString = JSON.stringify(yourChars);
-      localStorage.setItem("your-chars", charsString);
-      console.log("no issue here")
-      this.readyForPlay = true
-
-
-      }else{
-        this.warning = true
+        characters.push(this.character);
+        console.log(this.character);
+        let yourChars = JSON.parse(localStorage.getItem("your-chars"));
+        yourChars.push(this.character);
+        let charsString = JSON.stringify(yourChars);
+        localStorage.setItem("your-chars", charsString);
+        console.log("no issue here");
+        this.readyForPlay = true;
+      } else {
+        this.warning = true;
       }
+    },
+    changeBackground(e) {
+      let newBackground = backgrounds.find(background => background.id == e)
+      this.background = newBackground
+      this.auras.forEach(aura=>{
+
+          aura.value = 0
+
+       })
+      this.background.auraImpact.forEach(impactedAura =>{
+       this.auras.forEach(aura=>{
+        if(aura.name === impactedAura[0]){
+          aura.value += impactedAura[1]
+        }
+       })
+      })
     },
     changeName(e) {
       this.name = e;
       console.log("This name is ", this.name);
     },
-    uploadImage(e){
-      this.image = e
+    uploadImage(e) {
+      this.image = e;
     },
     increment(id) {
       console.log(this.myAttrs);
@@ -246,11 +268,14 @@ export default {
     newLook(e) {
       this.image = e;
     },
-    backFromNewGame(){
-      this.$emit("back-menu")
-
+    backFromNewGame() {
+      this.$emit("back-menu");
     },
   },
+  mounted(){
+    this.changeBackground(1)
+  }
+
 };
 </script>
 
@@ -265,7 +290,6 @@ input {
 #left-column {
   align-self: flex-start;
   max-width: 361.89px;
-  
 }
 
 #player-card {

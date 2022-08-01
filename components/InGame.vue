@@ -1,33 +1,28 @@
 <template>
   <div id="in-game-menu">
-    <div id="higher-in-game">
-      
-        <CharacterUI :you = "character"/>
-        <div>
-{{character}}
-          </div>
-      
+    <div id="column-screen">
+      <MainScreen />
+      <div>Messages are found here</div>
     </div>
-    <div id="lower-in-game">
-      this is where the description of various things will go.
-    </div>
+      <CharacterUI :you="character" />
   </div>
 </template>
 
 <script>
 import { adjust } from "../store/Adjust";
 import BattleMap from "./Maps/BattleMap.vue";
-import CharacterUI from './InGame/CharacterUI.vue';
-import useGlobal from '../store/globals'
+import CharacterUI from "./InGame/CharacterUI.vue";
+import useGlobal from "../store/globals";
+import MainScreen from "./InGame/MainScreen.vue";
 export default {
   data() {
-    const {character} = useGlobal()
+    const { character } = useGlobal();
     return {
       currentlyBattle: character.inBattle,
-      character
+      character,
     };
   },
-  components: { BattleMap, CharacterUI },
+  components: { BattleMap, CharacterUI, MainScreen },
   methods: {
     find() {
       adjust(this.character.id);
@@ -48,34 +43,29 @@ export default {
 </script>
 
 <style>
+#column-screen {
+  height: 100%;
+  width: 58%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: center;
+  margin: 0 auto;
+}
 #in-game-menu {
   display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: space-around;
   width: 100%;
   height: 100%;
-}
-#higher-in-game {
-
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  width: 100%;
   flex-wrap: wrap;
-  border-top: 2px white solid;
-  height: 50%;
 }
-#lower-in-game {
+#character-ui{
   width: 100%;
-}
-#action-screen {
-  border: 3px white solid;
-  width: 100%px;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
 }
 </style>

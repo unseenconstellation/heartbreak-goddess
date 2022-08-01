@@ -2,7 +2,7 @@
   <div id="main-menu">
 
     <MainMenuTitle v-if="!loadSelect && !options" />
-    <img v-if="!gameOn && !loadSelect" id="title-image" src="https://tb-lb.sb-cd.com/t/8940826/8/9/w:1600/t8-enh/widowmaker-headscissor-goddess.jpg" alt="headscissor">
+    <img v-if="!gameOn && !loadSelect" id="title-image" src="https://tb.sb-cd.com/t/8940826/8/9/w:800/t9-enh/widowmaker-headscissor-goddess.jpg" alt="headscissor">
     <LoadGame @back-menu="backMenu"  @load-chars="loadChars" v-if="yourChar.length>0&&hasChar && !loadSelect && !options"/>
     <button id="no-saves" v-else-if="!loadSelect && !options && yourChar.length === 0">Load Game</button>
     <CharacterSelect @char-delete ="charDelete" @back-menu="backMenu"  v-if="hasChar && loadSelect && !options" :yourChar = "yourChar"/>

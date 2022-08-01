@@ -49,19 +49,19 @@ export default {
     }
   },
   setup() {
-    const { gameOn, number, readyForPlay, character, yourChar } = useGlobal();
+    const { gameOn, number, readyForPlay, character, yourChar, metric } = useGlobal();
     return {
       gameOn,
       number,
       readyForPlay,
       character,
       yourChar,
+      metric
     };
   },
   data() {
     return {
       test: depAttrs,
-      metric: null,
       hasChar: false,
     };
   },
@@ -117,6 +117,7 @@ export default {
 #interface {
   text-align: center;
   height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;

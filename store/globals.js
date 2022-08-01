@@ -9,7 +9,7 @@ const state = reactive({
     yourChar: [],
     loadSelect: false,
     options: false,
-    metric: false
+    metric: null
     
 
 })

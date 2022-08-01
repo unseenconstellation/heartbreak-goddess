@@ -21,6 +21,7 @@ export default {
   methods: {
     changeMetric(e) {
       this.metric = !this.metric
+      localStorage.setItem("metric", this.metric)
     },
   },
 };
