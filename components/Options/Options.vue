@@ -6,7 +6,7 @@
     <button class="back-button" @click="unOption" v-if="options">←Back</button>
     <div v-if="options" id="options">
       <h3>Options</h3>
-      <Metric class="option" v-if="options" />
+      <Metric v-if="options" />
     </div>
   </div>
 </template>
